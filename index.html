@@ -1,0 +1,28 @@
+<html>
+<head>
+  <title>soma.js | Gist per username</title>
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+  <div class="gist" data-template="gist.GistTemplate">
+      <div class="search">
+        <input class="queryInput" placeholder="Search gists per user" data-keypress="search()" autofocus/>
+        <div class="message data-cloak">{{message}}</div>
+      </div>
+      <div class="result">
+        <ul class="data-cloak">
+          <li data-repeat="gist in gists" data-click="visit(gist.html_url)">
+            <div class="tpl-gist">
+              <div class="tpl-gist-username">{{gist.owner.login}}</div>
+              <div class="tpl-gist-text">{{gist.description}}</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+  </div>
+  <script type="text/javascript" src="js/libs/soma.js"></script>
+  <script type="text/javascript" src="js/libs/soma-template.js"></script>
+  <script type="text/javascript" src="js/libs/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="js/gist.js"></script>
+</body>
+</html>
