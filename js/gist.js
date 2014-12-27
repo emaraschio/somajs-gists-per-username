@@ -3,8 +3,9 @@
 
 	var App = soma.Application.extend({
 		init:function () {
-			this.injector.mapClass('service', GistService, true);
+			this.injector.mapClass('service', GistService);
 			this.commands.add(Events.SEARCH, SearchCommand);
+			this.createTemplate(GistTemplate, $('.gist')[0]);
 		}
 	});
 
@@ -39,29 +40,41 @@
 	};
 
 	var GistTemplate = function(scope, template, element, mediators, dispatcher) {
+
 		dispatcher.addEventListener(Events.SEARCH, searchHandler);
-		dispatcher.addEventListener(Events.SEARCH_RESULT, resultHandler.bind(this));
+		dispatcher.addEventListener(Events.SEARCH_RESULT, resultHandler);
+
 		function searchHandler(event) {
 			scope.message = "Searching...";
 			template.render();
 		}
+
 		function resultHandler(event) {
 			scope.gists = event.params;
 			scope.message = "Search result: " + scope.gists.length;
 			template.render();
 		}
+
 		scope.visit = function(event, url) {
 			window.open(url);
 		};
+
 		scope.search = function(event) {
 			var value = $('.queryInput', element).val();
 			if (event.which === 13 && value !== "") {
 				dispatcher.dispatch(Events.SEARCH, value);
 			}
 		};
+
+		return {
+			dispose: function() {
+				dispatcher.removeEventListener(Events.SEARCH, searchHandler);
+				dispatcher.removeEventListener(Events.SEARCH_RESULT, resultHandler);
+			}
+		};
+
 	};
 
 	var app = new App();
-	gist.GistTemplate = GistTemplate;
 
 })(window.gist = window.gist || {});
